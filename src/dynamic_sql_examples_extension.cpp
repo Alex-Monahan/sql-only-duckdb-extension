@@ -11,15 +11,15 @@
 // OpenSSL linked through vcpkg
 #include <openssl/opensslv.h>
 
-#include "default_functions.hpp"
-#include "default_table_functions.hpp"
+#include "duckdb/catalog/default/default_functions.hpp"
+#include "duckdb/catalog/default/default_table_functions.hpp"
 
 namespace duckdb {
 
 // To add a new scalar SQL macro, add a new macro to this array!
 // Copy and paste the top item in the array into the 
 // second-to-last position and make some modifications. 
-// (essentially, leave the last entry in the array as {nullptr, nullptr, {nullptr}, nullptr})
+// (essentially, leave the last entry in the array as {nullptr, nullptr, {nullptr}, {{nullptr, nullptr}}, nullptr})
 
 // Keep the DEFAULT_SCHEMA (no change needed)
 // Replace "times_two" with a name for your macro
@@ -27,8 +27,8 @@ namespace duckdb {
 //      If you do not have parameters, simplify to {nullptr}
 // Add the text of your SQL macro as a raw string with the format R"( select 42 )"
 static DefaultMacro dynamic_sql_examples_macros[] = {
-    {DEFAULT_SCHEMA, "times_two", {"x", nullptr}, R"(x*2)"},
-    {nullptr, nullptr, {nullptr}, nullptr}};
+    {DEFAULT_SCHEMA, "default_to_times_two", {"x", nullptr}, {{"multiplier", "2"}, {nullptr, nullptr}}, R"( x * multiplier )"},
+    {nullptr, nullptr, {nullptr}, {{nullptr, nullptr}}, nullptr}};
 
 
 // To add a new table SQL macro, add a new macro to this array!
@@ -47,7 +47,7 @@ static DefaultMacro dynamic_sql_examples_macros[] = {
 
 // clang-format off
 static const DefaultTableMacro dynamic_sql_examples_table_macros[] = {
-	{DEFAULT_SCHEMA, "times_two_table", {"x", nullptr}, {{"two", "2"}, {nullptr, nullptr}},  R"(SELECT x * two as output_column;)"},
+	{DEFAULT_SCHEMA, "default_to_times_two_table", {"x", nullptr}, {{"multiplier", "2"}, {nullptr, nullptr}},  R"( SELECT x * multiplier as output_column; )"},
 	{nullptr, nullptr, {nullptr}, {{nullptr, nullptr}}, nullptr}
 	};
 // clang-format on

@@ -12,6 +12,19 @@ Catalog Error: Scalar Function with name dynamic_sql_examples does not exist!
 require dynamic_sql_examples
 
 # Confirm the extension works
+
+# Test scalar macro overriding the default
+query I
+SELECT default_to_times_two(4, multiplier:=3);
+----
+12
+
+# Test table macro overriding the default
+query I
+SELECT * FROM default_to_times_two_table(5, multiplier:=3);
+----
+15
+
 query I
 SELECT dynamic_sql_examples('Sam');
 ----
